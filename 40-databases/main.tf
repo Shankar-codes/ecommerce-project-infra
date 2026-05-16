@@ -26,13 +26,14 @@ connection {
 
 # Provisioner to copy the file - terraform copies the file to the ec2 instance
 provisioner "file" {
-  source      = "bootstrap.sh"       # Local file path
-  destination = "/tmp/bootstrap.sh"      # Remote path on EC2
+  source      = "bootstap.sh"       # Local file path
+  destination = "/tmp/bootstap.sh"      # Remote path on EC2
 }
+
 provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/bootstrap.sh",
-      "sudo sh /tmp/bootstrap.sh"
+      "chmod +x /tmp/bootstap.sh",
+      "sudo sh /tmp/bootstap.sh"
     ]
   }
 
