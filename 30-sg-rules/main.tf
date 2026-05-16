@@ -7,6 +7,7 @@ resource "aws_security_group_rule" "backend_alb_bastion" {
   to_port           = 80
 }
 
+#bastion host connecting to mongodb server on port 22
 resource "aws_security_group_rule" "mongodb_bastion" {
   type              = "ingress"
   security_group_id = local.mongodb_sg_id # 
