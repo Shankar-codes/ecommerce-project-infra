@@ -16,6 +16,7 @@ resource "terraform_data" "mongodb" {
     aws_instance.mongodb.id
   ]
 
+
 connection {
     type = "ssh"
     user = "ec2-user"
@@ -23,9 +24,17 @@ connection {
     host = aws_instance.mongodb.private_ip
 }
 
+# Provisioner to copy the file - terraform copies the file to the ec2 instance
+provisioner "file" {
+  source      = "bootstrap.sh"       # Local file path
+  destination = "/tmp/bootstrap.sh"      # Remote path on EC2
+}
 provisioner "remote-exec" {
     inline = [
-      "echo Hello world"
+      "chmod +x /tmp/bootstrap.sh",
+      "sudo sh /tmp/bootstrap.sh"
     ]
   }
+
+  
 }
