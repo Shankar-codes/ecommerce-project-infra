@@ -123,3 +123,43 @@ provisioner "remote-exec" {
 }
 
 
+# mysql instance
+resource "aws_instance" "mysql" {
+  ami = local.ami_id
+  instance_type = var.instance_type
+  vpc_security_group_ids = [local.mysql_sg_id]
+  subnet_id = local.database_subnet_ids
+  tags =merge(local.common_tags, {
+      Name = "${var.project_name}-${var.environment}-mysql"
+      Terraform = "true"
+  }
+  )
+}
+
+#this is null resource
+resource "terraform_data" "mysql" {
+  triggers_replace = [
+    aws_instance.mysql.id
+  ]
+
+
+connection {
+    type = "ssh"
+    user = "ec2-user"
+    password = "DevOps321"
+    host = aws_instance.mysql.private_ip
+}
+
+# Provisioner to copy the file - terraform copies the file to the ec2 instance
+provisioner "file" {
+  source      = "bootstap.sh"       # Local file path
+  destination = "/tmp/bootstap.sh"      # Remote path on EC2
+}
+
+provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /tmp/bootstap.sh",
+      "sudo sh /tmp/bootstap.sh mysql"
+    ]
+  }
+}
