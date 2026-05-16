@@ -7,8 +7,13 @@ variable "environment" {
 }
 
 variable "sg_name" {
-  default = ["catalogue-sg", "mongodb-sg", "redis-sg", "bastion-sg",
-  "frontend-lb"]
+  default = ["mongodb", "redis", "mysql", "rabbitmq",
+  "catalogue", "user", "cart", "shipping", "payment",
+  "frontend",
+  "bastion",
+  "frontend_alb",
+  "backend_alb"
+  ]
 }
 
 variable "sg_description" {
