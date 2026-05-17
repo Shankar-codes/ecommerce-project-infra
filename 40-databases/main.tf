@@ -138,7 +138,7 @@ resource "aws_instance" "mysql" {
 }
 
 resource "aws_iam_instance_profile" "mysql" {
-  name = "EC2ssmParameterRead"
+  name = "mysql"
   role = "EC2ssmParameterRead"
 }
 
