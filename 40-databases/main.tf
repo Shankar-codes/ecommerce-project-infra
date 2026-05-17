@@ -167,6 +167,6 @@ provisioner "remote-exec" {
 
 
 resource "aws_iam_instance_profile" "mysql" {
-  name = "mysql"
+  name = "EC2ssmParameterRead"
   role = "EC2ssmParameterRead"
 }
