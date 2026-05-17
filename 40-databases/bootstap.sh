@@ -1,4 +1,5 @@
 #/bin/bash
+
 component=$1
 dnf install ansible -y
 #pip3 install boto3 botocore
@@ -19,6 +20,7 @@ if [ -d $ANSIBLE_DIR ]; then
   git pull
 else
   git clone $REPO_URL
+  cd $ANSIBLE_DIR
 fi
 
 ansible-playbook -e component=$component main.yaml
