@@ -137,6 +137,11 @@ resource "aws_instance" "mysql" {
   )
 }
 
+resource "aws_iam_instance_profile" "mysql" {
+  name = "EC2ssmParameterRead"
+  role = "EC2ssmParameterRead"
+}
+
 #this is null resource
 resource "terraform_data" "mysql" {
   triggers_replace = [
@@ -166,7 +171,3 @@ provisioner "remote-exec" {
 }
 
 
-resource "aws_iam_instance_profile" "mysql" {
-  name = "EC2ssmParameterRead"
-  role = "EC2ssmParameterRead"
-}
