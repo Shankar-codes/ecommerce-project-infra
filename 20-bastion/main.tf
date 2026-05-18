@@ -10,10 +10,9 @@ resource "aws_instance" "bastion" {
       Terraform = "true"
   }
   )
+}  
 
-  resource "aws_iam_instance_profile" "bastion" {
+resource "aws_iam_instance_profile" "bastion" {
   name = "bastion"
   role = "BastionAdminRole"
-}
-
 }
