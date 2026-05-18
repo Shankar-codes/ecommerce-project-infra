@@ -5,6 +5,7 @@ locals {
   private_subnet_ids = split(",", data.aws_ssm_parameter.private_subnet_ids.value)[0]
   ami_id = data.aws_ami.ellamma_roboshop.id
   vpc_id = data.aws_ssm_parameter.vpc_id.value
+  backend_alb_listener_arn = data.aws_ssm_parameter.backend_alb_listener_arn.value
   common_tags = {
     Project = var.project_name
     Environment = var.environment
