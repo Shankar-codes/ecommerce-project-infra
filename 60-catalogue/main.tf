@@ -39,10 +39,25 @@ provisioner "remote-exec" {
   }
 }
 
+# creating R53 record for catalogue server catalogue.ellamma.fun
 resource "aws_route53_record" "catalogue" {
   zone_id = var.zone_id
   name    = "catalogue.${var.domain_name}" #catalogue.ellamma.fun
   type    = "A"
   ttl     = 1
   records = [aws_instance.catalogue.private_ip]
+}
+
+# stopping the catalogue instance 
+resource "aws_ec2_instance_state" "catalogue" {
+  instance_id = aws_instance.catalogue.id
+  state       = "stopped" # Change to "running" to start the instance
+  depends_on = [terraform_data.catalogue]
+}
+
+# creating AMI from the catalogue instance
+resource "aws_ami_from_instance" "example" {
+  name               = "${var.project_name}-${var.environment}-catalogue-ami"
+  source_instance_id = aws_instance.catalogue.id
+  depends_on = [aws_ec2_instance_state.catalogue]
 }
