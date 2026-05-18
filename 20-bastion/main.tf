@@ -12,7 +12,7 @@ resource "aws_instance" "bastion" {
   )
 
   resource "aws_iam_instance_profile" "bastion" {
-  name = "baston"
+  name = "bastion"
   role = "BastionAdminRole"
 }
 
