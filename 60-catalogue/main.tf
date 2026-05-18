@@ -56,8 +56,86 @@ resource "aws_ec2_instance_state" "catalogue" {
 }
 
 # creating AMI from the catalogue instance
-resource "aws_ami_from_instance" "example" {
+resource "aws_ami_from_instance" "catalogue" {
   name               = "${var.project_name}-${var.environment}-catalogue-ami"
   source_instance_id = aws_instance.catalogue.id
   depends_on = [aws_ec2_instance_state.catalogue]
+}
+
+# target group for the catalogue instance
+resource "aws_lb_target_group" "catalogue" {
+  name     = "${local.common_name_suffix}-catalogue-tg"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = local.vpc_id
+  deregistration_delay = 60 #waiting for 60 seconds before deregistering the instance from the target group
+  health_check {
+    path                = "/health"
+    interval            = 10
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    matcher             = "200-299"
+  }
+}
+
+# creating launch template for the catalogue instance
+resource "aws_launch_template" "catalogue" {
+  name = "${local.common_name_suffix}-catalogue"
+  image_id = "aws_ami_from_instance.catalogue.id"
+  instance_initiated_shutdown_behavior = "terminate"
+  instance_type = "t3.micro"
+
+  vpc_security_group_ids = ["local.catalogue_sg_id"]
+
+  tag_specifications {
+  resource_type = "instance"
+
+  tags = merge(local.common_tags, {
+    Name = "${local.common_name_suffix}-catalogue"
+  })
+  }
+
+  tag_specifications {
+    resource_type = "volume"
+
+    tags = merge(local.common_tags, {
+      Name = "${local.common_name_suffix}-catalogue"
+    })
+  }
+}
+
+# auto scaling group for the catalogue instance
+resource "aws_autoscaling_group" "catalogue" {
+  name                      = "${local.common_name_suffix}-catalogue"
+  max_size                  = 10
+  min_size                  = 1
+  health_check_grace_period = 100
+  health_check_type         = "ELB"
+  desired_capacity          = 1
+  force_delete               = false
+  launch_template {
+    id      = aws_launch_template.catalogue.id
+    version = aws_launch_template.catalogue.latest_version
+  }
+
+  vpc_zone_identifier       = [local.private_subnet_ids]
+  target_group_arns         = [aws_lb_target_group.catalogue.arn]
+
+  timeouts {
+    delete = "15m"
+  }
+}
+
+resource "aws_autoscaling_policy" "catalogue" {
+  name                   = "${local.common_name_suffix}-catalogue"
+  autoscaling_group_name = aws_autoscaling_group.catalogue.name
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0
+  }
 }
