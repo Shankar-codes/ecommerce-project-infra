@@ -68,6 +68,17 @@ resource "aws_security_group_rule" "mongodb_catalogue" {
   to_port           = 27017
 }
 
+
+# backend alb connecting to catalogue server on port 8080
+resource "aws_security_group_rule" "catalogue_backend_alb" {
+  type              = "ingress"
+  security_group_id = local.catalogue_sg_id # 
+  source_security_group_id = local.backend_alb_sg_id #
+  from_port         = 8080
+  protocol          = "tcp"
+  to_port           = 8080
+}
+
 #this is attached to bastion sg to allow ssh access from laptop to bastion host
 resource "aws_security_group_rule" "bastion_laptop" {
   type              = "ingress"
