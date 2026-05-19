@@ -64,7 +64,7 @@ resource "aws_ami_from_instance" "catalogue" {
 
 # target group for the catalogue instance
 resource "aws_lb_target_group" "catalogue" {
-  name     = "${local.common_name_suffix}-catalogue-tg"
+  name     = "${local.common_name_suffix}-catalogue"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = local.vpc_id
@@ -87,6 +87,8 @@ resource "aws_launch_template" "catalogue" {
   instance_type = "t3.micro"
 
   vpc_security_group_ids = ["local.catalogue_sg_id"]
+  update_default_version = true
+
 
   tag_specifications {
   resource_type = "instance"
