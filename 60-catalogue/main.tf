@@ -157,7 +157,6 @@ resource "aws_lb_listener_rule" "catalogue" {
   }
 }
 
-
 resource "terraform_data" "catalogue_local" {
   triggers_replace = [
     aws_instance.catalogue.id
