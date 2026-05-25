@@ -97,6 +97,16 @@ resource "aws_security_group_rule" "shipping_bastion" {
   to_port           = 22
 }
 
+#bastion host connecting to payment server on port 22
+resource "aws_security_group_rule" "frontend_bastion" {
+  type              = "ingress"
+  security_group_id = local.frontend_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
 # mongodb connecting to catalogue server on port 27017
 resource "aws_security_group_rule" "mongodb_catalogue" {
   type              = "ingress"
