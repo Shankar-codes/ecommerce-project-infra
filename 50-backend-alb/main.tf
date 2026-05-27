@@ -32,14 +32,13 @@ resource "aws_lb_listener" "back_end" {
 # creating R53 record for backend ALB backend-alb.ellamma.fun
 resource "aws_route53_record" "backend_alb" {
   zone_id = var.zone_id
-  name    = "*.backend-alb.${var.domain_name}" #backend-alb.ellamma.fun
+  name = "*.backend-alb-${var.environment}.${var.domain_name}"
   type    = "A"
-  
-  # these are details of aws alb
+
   alias {
+    # These are ALB details, not our domain details
     name                   = aws_lb.backend_alb.dns_name
     zone_id                = aws_lb.backend_alb.zone_id
     evaluate_target_health = true
   }
-  
 }
