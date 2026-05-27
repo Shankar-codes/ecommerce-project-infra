@@ -1,12 +1,3 @@
-resource "aws_security_group_rule" "backend_alb_bastion" {
-  type              = "ingress"
-  security_group_id = local.backend_alb_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 80
-  protocol          = "tcp"
-  to_port           = 80
-}
-
 #bastion host connecting to mongodb server on port 22
 resource "aws_security_group_rule" "mongodb_bastion" {
   type              = "ingress"
@@ -16,6 +7,16 @@ resource "aws_security_group_rule" "mongodb_bastion" {
   protocol          = "tcp"
   to_port           = 22
 }
+
+resource "aws_security_group_rule" "backend_alb_bastion" {
+  type              = "ingress"
+  security_group_id = local.backend_alb_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 80
+  protocol          = "tcp"
+  to_port           = 80
+}
+
 
 #bastion host connecting to redis server on port 22
 resource "aws_security_group_rule" "redis_bastion" {
@@ -85,6 +86,15 @@ resource "aws_security_group_rule" "payment_bastion" {
   from_port         = 22
   protocol          = "tcp"
   to_port           = 22
+}
+
+resource "aws_security_group_rule" "payment_shipping" {
+  type              = "ingress"
+  security_group_id = local.payment_sg_id
+  source_security_group_id = local.shipping_sg_id
+  from_port         = 8080
+  protocol          = "tcp"
+  to_port           = 8080
 }
 
 #bastion host connecting to shipping server on port 22
@@ -264,6 +274,33 @@ resource "aws_security_group_rule" "backend_alb_frontend" {
   type              = "ingress"
   security_group_id = local.backend_alb_sg_id # 
   source_security_group_id = local.frontend_sg_id #
+  from_port         = 80
+  protocol          = "tcp"
+  to_port           = 80
+}
+
+resource "aws_security_group_rule" "backend_alb_cart" {
+  type              = "ingress"
+  security_group_id = local.backend_alb_sg_id
+  source_security_group_id = local.cart_sg_id
+  from_port         = 80
+  protocol          = "tcp"
+  to_port           = 80
+}
+
+resource "aws_security_group_rule" "backend_alb_shipping" {
+  type              = "ingress"
+  security_group_id = local.backend_alb_sg_id
+  source_security_group_id = local.shipping_sg_id
+  from_port         = 80
+  protocol          = "tcp"
+  to_port           = 80
+}
+
+resource "aws_security_group_rule" "backend_alb_payment" {
+  type              = "ingress"
+  security_group_id = local.backend_alb_sg_id
+  source_security_group_id = local.payment_sg_id
   from_port         = 80
   protocol          = "tcp"
   to_port           = 80
