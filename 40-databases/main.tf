@@ -33,7 +33,7 @@ provisioner "file" {
 
 provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /tmp/bootstap.sh",
+      "chmod +x /tmp/bootstap.sh",
       "sudo sh /tmp/bootstap.sh mongodb"
     ]
   }
@@ -74,7 +74,7 @@ provisioner "file" {
 
 provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /tmp/bootstap.sh",
+      "chmod +x /tmp/bootstap.sh",
       "sudo sh /tmp/bootstap.sh redis"
     ]
   }
@@ -116,7 +116,7 @@ provisioner "file" {
 
 provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /tmp/bootstap.sh",
+      "chmod +x /tmp/bootstap.sh",
       "sudo sh /tmp/bootstap.sh rabbitmq"
     ]
   }
@@ -164,7 +164,7 @@ provisioner "file" {
 
 provisioner "remote-exec" {
     inline = [
-      "sudo chmod +x /tmp/bootstap.sh",
+      "chmod +x /tmp/bootstap.sh",
       "sudo sh /tmp/bootstap.sh mysql"
     ]
   }
