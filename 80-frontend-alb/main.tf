@@ -35,6 +35,7 @@ resource "aws_route53_record" "frontend_alb" {
   zone_id = var.zone_id
   name    = "roboshop.${var.domain_name}" #roboshop.ellamma.fun
   type    = "A"
+  allow_overwrite = true
   
   # these are details of aws alb
   alias {
