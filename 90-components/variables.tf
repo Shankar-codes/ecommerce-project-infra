@@ -30,7 +30,7 @@ variable "components" {
 }
 
 variable "project_name" {
-  default = "ellamma-roboshop"
+  default = "roboshop"
 }
 
 variable "environment" {
