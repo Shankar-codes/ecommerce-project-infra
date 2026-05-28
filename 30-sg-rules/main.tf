@@ -1,116 +1,8 @@
+###### Mongo DB ######
 #bastion host connecting to mongodb server on port 22
 resource "aws_security_group_rule" "mongodb_bastion" {
   type              = "ingress"
   security_group_id = local.mongodb_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-resource "aws_security_group_rule" "backend_alb_bastion" {
-  type              = "ingress"
-  security_group_id = local.backend_alb_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 80
-  protocol          = "tcp"
-  to_port           = 80
-}
-
-
-#bastion host connecting to redis server on port 22
-resource "aws_security_group_rule" "redis_bastion" {
-  type              = "ingress"
-  security_group_id = local.redis_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to rabbitmq server on port 22
-resource "aws_security_group_rule" "rabbitmq_bastion" {
-  type              = "ingress"
-  security_group_id = local.rabbitmq_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to mysql server on port 22
-resource "aws_security_group_rule" "mysql_bastion" {
-  type              = "ingress"
-  security_group_id = local.mysql_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to catalogue server on port 22
-resource "aws_security_group_rule" "catalogue_bastion" {
-  type              = "ingress"
-  security_group_id = local.catalogue_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to user server on port 22
-resource "aws_security_group_rule" "user_bastion" {
-  type              = "ingress"
-  security_group_id = local.user_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to cart server on port 22
-resource "aws_security_group_rule" "cart_bastion" {
-  type              = "ingress"
-  security_group_id = local.cart_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to payment server on port 22
-resource "aws_security_group_rule" "payment_bastion" {
-  type              = "ingress"
-  security_group_id = local.payment_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-resource "aws_security_group_rule" "payment_shipping" {
-  type              = "ingress"
-  security_group_id = local.payment_sg_id
-  source_security_group_id = local.shipping_sg_id
-  from_port         = 8080
-  protocol          = "tcp"
-  to_port           = 8080
-}
-
-#bastion host connecting to shipping server on port 22
-resource "aws_security_group_rule" "shipping_bastion" {
-  type              = "ingress"
-  security_group_id = local.shipping_sg_id # 
-  source_security_group_id = local.bastion_sg_id #
-  from_port         = 22
-  protocol          = "tcp"
-  to_port           = 22
-}
-
-#bastion host connecting to payment server on port 22
-resource "aws_security_group_rule" "frontend_bastion" {
-  type              = "ingress"
-  security_group_id = local.frontend_sg_id # 
   source_security_group_id = local.bastion_sg_id #
   from_port         = 22
   protocol          = "tcp"
@@ -137,6 +29,17 @@ resource "aws_security_group_rule" "mongodb_user" {
   to_port           = 27017
 }
 
+###### redis SG rules ######
+#bastion host connecting to redis server on port 22
+resource "aws_security_group_rule" "redis_bastion" {
+  type              = "ingress"
+  security_group_id = local.redis_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
 # user connecting to redis server on port 6379
 resource "aws_security_group_rule" "redis_user" {
   type              = "ingress"
@@ -157,6 +60,18 @@ resource "aws_security_group_rule" "redis_cart" {
   to_port           = 6379
 }
 
+
+######## mysql SG rules ######
+#bastion host connecting to mysql server on port 22
+resource "aws_security_group_rule" "mysql_bastion" {
+  type              = "ingress"
+  security_group_id = local.mysql_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
 # shipping connecting to mysql server on port 3306
 resource "aws_security_group_rule" "mysql_shipping" {
   type              = "ingress"
@@ -167,44 +82,15 @@ resource "aws_security_group_rule" "mysql_shipping" {
   to_port           = 3306
 }
 
-# catalogue connecting to cart server on port 8080
-resource "aws_security_group_rule" "catalogue_cart" {
+######## rabbitmq SG rules ######
+#bastion host connecting to rabbitmq server on port 22
+resource "aws_security_group_rule" "rabbitmq_bastion" {
   type              = "ingress"
-  security_group_id = local.catalogue_sg_id # 
-  source_security_group_id = local.cart_sg_id #
-  from_port         = 8080
+  security_group_id = local.rabbitmq_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
   protocol          = "tcp"
-  to_port           = 8080
-}
-
-# cart connecting to shipping server on port 8080
-resource "aws_security_group_rule" "cart_shipping" {
-  type              = "ingress"
-  security_group_id = local.cart_sg_id # 
-  source_security_group_id = local.shipping_sg_id #
-  from_port         = 8080
-  protocol          = "tcp"
-  to_port           = 8080
-}
-
-# user connecting to payment server on port 8080
-resource "aws_security_group_rule" "user_payment" {
-  type              = "ingress"
-  security_group_id = local.user_sg_id # 
-  source_security_group_id = local.payment_sg_id #
-  from_port         = 8080
-  protocol          = "tcp"
-  to_port           = 8080
-}
-
-# cart connecting to payment server on port 8080
-resource "aws_security_group_rule" "cart_payment" {
-  type              = "ingress"
-  security_group_id = local.cart_sg_id # 
-  source_security_group_id = local.payment_sg_id #
-  from_port         = 8080
-  protocol          = "tcp"
-  to_port           = 8080
+  to_port           = 22
 }
 
 # payment connecting to rabbitmq server on port 5672
@@ -217,6 +103,38 @@ resource "aws_security_group_rule" "rabbitmq_payment" {
   to_port           = 5672
 }
 
+###### catalogue SG rules ######
+#bastion host connecting to catalogue server on port 22
+resource "aws_security_group_rule" "catalogue_bastion" {
+  type              = "ingress"
+  security_group_id = local.catalogue_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
+# backend alb connecting to catalogue server on port 8080
+resource "aws_security_group_rule" "catalogue_backend_alb" {
+  type              = "ingress"
+  security_group_id = local.catalogue_sg_id # 
+  source_security_group_id = local.backend_alb_sg_id #
+  from_port         = 8080
+  protocol          = "tcp"
+  to_port           = 8080
+}
+
+
+####### user SG rules ######
+#bastion host connecting to user server on port 22
+resource "aws_security_group_rule" "user_bastion" {
+  type              = "ingress"
+  security_group_id = local.user_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
 
 # backend alb connecting to user server on port 8080
 resource "aws_security_group_rule" "user_backend_alb" {
@@ -228,6 +146,18 @@ resource "aws_security_group_rule" "user_backend_alb" {
   to_port           = 8080
 }
 
+
+##### cart SG rules ######
+#bastion host connecting to cart server on port 22
+resource "aws_security_group_rule" "cart_bastion" {
+  type              = "ingress"
+  security_group_id = local.cart_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
 # backend alb connecting to cart server on port 8080
 resource "aws_security_group_rule" "cart_backend_alb" {
   type              = "ingress"
@@ -236,6 +166,18 @@ resource "aws_security_group_rule" "cart_backend_alb" {
   from_port         = 8080
   protocol          = "tcp"
   to_port           = 8080
+}
+
+
+####### shipping SG rules ######
+#bastion host connecting to shipping server on port 22
+resource "aws_security_group_rule" "shipping_bastion" {
+  type              = "ingress"
+  security_group_id = local.shipping_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
 }
 
 # backend alb connecting to shipping server on port 8080
@@ -249,6 +191,17 @@ resource "aws_security_group_rule" "shipping_backend_alb" {
 }
 
 
+####### payment SG rules ######
+#bastion host connecting to payment server on port 22
+resource "aws_security_group_rule" "payment_bastion" {
+  type              = "ingress"
+  security_group_id = local.payment_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
 # backend alb connecting to cart server on port 8080
 resource "aws_security_group_rule" "payment_backend_alb" {
   type              = "ingress"
@@ -259,14 +212,24 @@ resource "aws_security_group_rule" "payment_backend_alb" {
   to_port           = 8080
 }
 
-# backend alb connecting to catalogue server on port 8080
-resource "aws_security_group_rule" "catalogue_backend_alb" {
+resource "aws_security_group_rule" "payment_shipping" {
   type              = "ingress"
-  security_group_id = local.catalogue_sg_id # 
-  source_security_group_id = local.backend_alb_sg_id #
+  security_group_id = local.payment_sg_id
+  source_security_group_id = local.shipping_sg_id
   from_port         = 8080
   protocol          = "tcp"
   to_port           = 8080
+}
+
+
+#### backend alb SG rules ######
+resource "aws_security_group_rule" "backend_alb_bastion" {
+  type              = "ingress"
+  security_group_id = local.backend_alb_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 80
+  protocol          = "tcp"
+  to_port           = 80
 }
 
 # backend alb connecting to frontend server on port 80
@@ -306,6 +269,17 @@ resource "aws_security_group_rule" "backend_alb_payment" {
   to_port           = 80
 }
 
+######## frontend SG rules ######
+#bastion host connecting to payment server on port 22
+resource "aws_security_group_rule" "frontend_bastion" {
+  type              = "ingress"
+  security_group_id = local.frontend_sg_id # 
+  source_security_group_id = local.bastion_sg_id #
+  from_port         = 22
+  protocol          = "tcp"
+  to_port           = 22
+}
+
 # frontend alb connecting to frontend alb server on port 80
 resource "aws_security_group_rule" "frontend_frontend_alb" {
   type              = "ingress"
@@ -316,7 +290,7 @@ resource "aws_security_group_rule" "frontend_frontend_alb" {
   to_port           = 80
 }
 
-# frontend alb
+##### frontend alb sg rules ######
 resource "aws_security_group_rule" "frontend_alb_public" {
   type              = "ingress"
   security_group_id = local.frontend_alb_sg_id #
@@ -326,6 +300,7 @@ resource "aws_security_group_rule" "frontend_alb_public" {
   to_port           = 443
 }
 
+##### bastion SG rules ######
 #this is attached to bastion sg to allow ssh access from laptop to bastion host
 resource "aws_security_group_rule" "bastion_laptop" {
   type              = "ingress"
