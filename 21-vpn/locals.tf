@@ -1,5 +1,5 @@
 locals {
-  ami_id = data.aws_ami.ellamma_roboshop.id
+  ami_id = data.aws_ami.open_vpn.id
   open_vpn_sg_id = data.aws_ssm_parameter.open_vpn_sg_id.value
   public_subnet_ids = split(",", data.aws_ssm_parameter.public_subnet_ids.value)[0]
   common_tags = {
