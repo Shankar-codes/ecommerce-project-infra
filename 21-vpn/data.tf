@@ -1,10 +1,10 @@
-data "aws_ami" "ellamma_roboshop" {
+data "aws_ami" "open_vpn" {
   most_recent      = true
-  owners           = ["973714476881"]
+  owners           = ["679593333241"]
 
   filter {
     name   = "name"
-    values = ["Redhat-9-DevOps-Practice"]
+    values = ["OpenVPN Access Server Community Image-8fbe3379-*"]
   }
 
   filter {
