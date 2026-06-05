@@ -1,4 +1,4 @@
-resource "aws_cloudfront_distribution" "ellamma-roboshop" {
+resource "aws_cloudfront_distribution" "roboshop" {
   origin {
     # roboshop.ellamma.fun
     domain_name              = "roboshop.${var.domain_name}"
@@ -31,7 +31,7 @@ resource "aws_cloudfront_distribution" "ellamma-roboshop" {
     path_pattern     = "/images/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.environment}.${var.domain_name}"
+    target_origin_id = "roboshop.${var.domain_name}"
 
     viewer_protocol_policy = "https-only"
     cache_policy_id         = local.caching_optimized_id # CachingOptimized
@@ -42,7 +42,7 @@ resource "aws_cloudfront_distribution" "ellamma-roboshop" {
     path_pattern     = "/media/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.environment}.${var.domain_name}"
+    target_origin_id = "roboshop.${var.domain_name}"
 
     viewer_protocol_policy = "https-only"
     cache_policy_id         = local.caching_optimized_id # CachingOptimized
@@ -72,8 +72,8 @@ resource "aws_route53_record" "cdn" {
   allow_overwrite = true
 
   alias {
-    name                   = aws_cloudfront_distribution.ellamma-roboshop.domain_name
-    zone_id                = aws_cloudfront_distribution.ellamma-roboshop.hosted_zone_id
+    name                   = aws_cloudfront_distribution.roboshop.domain_name
+    zone_id                = aws_cloudfront_distribution.roboshop.hosted_zone_id
     evaluate_target_health = true
   }
 }
