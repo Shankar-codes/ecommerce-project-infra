@@ -1,7 +1,8 @@
 resource "aws_cloudfront_distribution" "ellamma-roboshop" {
   origin {
-    domain_name              = "${var.environment}-${var.domain_name}"
-    origin_id                = "${var.environment}-${var.domain_name}"
+    # roboshop.ellamma.fun
+    domain_name              = "roboshop.${var.domain_name}"
+    origin_id                = "roboshop.${var.domain_name}"
 
     custom_origin_config {
       http_port              = 80
@@ -14,12 +15,12 @@ resource "aws_cloudfront_distribution" "ellamma-roboshop" {
   enabled             = true
 
   #dev.ellamma.fun
-  aliases = ["${var.environment}-${var.domain_name}"]
+  aliases = ["${var.environment}.${var.domain_name}"]
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.environment}-${var.domain_name}"
+    target_origin_id = "roboshop.${var.domain_name}"
 
     viewer_protocol_policy = "https-only"
     cache_policy_id         = local.caching_disabled_id # CachingDisabled
@@ -30,7 +31,7 @@ resource "aws_cloudfront_distribution" "ellamma-roboshop" {
     path_pattern     = "/images/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.environment}-${var.domain_name}"
+    target_origin_id = "${var.environment}.${var.domain_name}"
 
     viewer_protocol_policy = "https-only"
     cache_policy_id         = local.caching_optimized_id # CachingOptimized
@@ -41,7 +42,7 @@ resource "aws_cloudfront_distribution" "ellamma-roboshop" {
     path_pattern     = "/media/*"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "${var.environment}-${var.domain_name}"
+    target_origin_id = "${var.environment}.${var.domain_name}"
 
     viewer_protocol_policy = "https-only"
     cache_policy_id         = local.caching_optimized_id # CachingOptimized
@@ -65,14 +66,14 @@ resource "aws_cloudfront_distribution" "ellamma-roboshop" {
 
 
 resource "aws_route53_record" "cdn" {
-  for_each = aws_cloudfront_distribution.s3_distribution.aliases
-  zone_id  = data.aws_route53_zone.my_domain.zone_id
-  name     = each.value
-  type     = "A"
+  zone_id = var.zone_id
+  name    = "${var.environment}.${var.domain_name}" # dev.ellamma.fun
+  type    = "A"
+  allow_overwrite = true
 
   alias {
-    name                   = aws_cloudfront_distribution.roboshop.domain_name
-    zone_id                = aws_cloudfront_distribution.roboshop.hosted_zone_id
+    name                   = aws_cloudfront_distribution.ellamma-roboshop.domain_name
+    zone_id                = aws_cloudfront_distribution.ellamma-roboshop.hosted_zone_id
     evaluate_target_health = true
   }
 }
